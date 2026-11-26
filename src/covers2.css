@@ -1,0 +1,173 @@
+/* =====================================================================
+   Redesigned templates (Modern Romance unchanged): photo-first covers
+   Ivory Classic · Garden Veil · Royal Khmer · Starlight · Golden Deco ·
+   Blush Portrait · Cinema Love
+   ===================================================================== */
+
+/* ---------- shared ---------- */
+.cover-hx { position: relative; min-height: 100cqh; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.hero { position: relative; overflow: hidden; }
+.hero .hero-img { position: absolute; inset: 0; }
+.inv:is(.is-open, .is-revealing) .cover-hx .hero { animation: heroIn 1200ms ease both; }
+.inv:is(.is-open, .is-revealing) .cover-hx .hero-img img { animation: kenBurns 7000ms cubic-bezier(.2, .6, .2, 1) both; }
+@keyframes heroIn { from { opacity: 0; } }
+@keyframes kenBurns { from { scale: 1.14; } to { scale: 1; } }
+.hx-text { position: relative; z-index: 3; display: grid; justify-items: center; gap: 8px; text-align: center; padding: 0 28px 34px; }
+.hx-text .names { font-size: clamp(36px, 10.5cqw, 72px); line-height: 1.05; }
+.hx-text .cover-date { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+.hx-text .guest-plate { margin-top: 6px; }
+.inv.lang-km .hx-text .cover-date { letter-spacing: 0; text-transform: none; font-size: 15px; }
+
+/* =================== IVORY CLASSIC =================== */
+.cover-ivory { padding: 18px 18px 26px; }
+.cover-ivory .hero { height: 50cqh; border-radius: 3px; outline: 1px solid color-mix(in srgb, var(--gold) 70%, transparent); outline-offset: 6px; margin: 6px; flex: none; }
+.cover-ivory .hx-text {
+  margin: -58px 26px 0; padding: 22px 18px 20px;
+  background: color-mix(in srgb, var(--bg) 90%, #fff); box-shadow: 0 24px 44px -26px rgba(0, 0, 0, .45);
+}
+.cover-ivory .hx-text::before { content: ""; position: absolute; inset: 7px; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); pointer-events: none; }
+.inv:is(.is-open, .is-revealing) .cover-ivory .hx-text { animation: ivCardUp 1100ms cubic-bezier(.2, .75, .2, 1) 350ms both; }
+@keyframes ivCardUp { from { transform: translateY(46px); opacity: 0; } }
+.cover-ivory .kicker { color: var(--accent); }
+.cover-ivory .names { font-size: clamp(30px, 9cqw, 58px); }
+.cover-ivory .cover-date { color: var(--accent); }
+.gp-ivory .gp-name { font-size: clamp(22px, 6.4cqw, 30px); }
+
+/* =================== GARDEN VEIL =================== */
+.cover-garden .hero {
+  position: absolute; left: 0; right: 0; top: 0; height: 60cqh;
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 90%); mask-image: linear-gradient(180deg, #000 45%, transparent 90%);
+}
+.cover-garden .hx-text { margin-top: auto; padding-top: 40px; }
+.garden-sprig { position: absolute; z-index: 2; width: 92px; height: 92px; color: var(--accent); top: calc(46cqh - 46px); opacity: .9; }
+.garden-sprig.gs-l { left: -8px; }
+.garden-sprig.gs-r { right: -8px; }
+.inv:is(.is-open, .is-revealing) .garden-sprig { animation: sprigGrow 1400ms cubic-bezier(.2, .8, .2, 1) 500ms both; }
+@keyframes sprigGrow { from { opacity: 0; clip-path: inset(100% 0 0 0); } to { opacity: .9; clip-path: inset(0); } }
+.cover-garden .kicker { color: var(--accent); }
+.cover-garden .names { font-size: clamp(46px, 13.5cqw, 92px); line-height: 1; color: var(--accent); }
+.cover-garden .names .amp { color: var(--gold); }
+.cover-garden .cover-date { font-family: var(--f-display); font-size: 19px; letter-spacing: .04em; text-transform: none; }
+.gp-garden { padding: 10px 28px 12px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 9%, transparent); }
+
+/* =================== ROYAL KHMER =================== */
+.cover-royal .hero { height: 47cqh; flex: none; }
+.cover-royal .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--bg) 70%, transparent)); }
+.royal-panel {
+  position: relative; z-index: 2; flex: 1; margin-top: -64px; padding-top: 44px;
+  background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--bg) 85%, #fff 6%), var(--bg) 70%);
+  border-radius: 50% 50% 0 0 / 64px 64px 0 0;
+}
+.royal-panel::before {
+  content: ""; position: absolute; left: 10px; right: 10px; top: 9px; height: 80px; pointer-events: none;
+  border-top: 1px solid color-mix(in srgb, var(--gold) 80%, transparent);
+  border-radius: 50% 50% 0 0 / 56px 56px 0 0;
+}
+.royal-flame { position: absolute; left: 50%; top: 0; width: 46px; transform: translate(-50%, -48%); color: var(--gold); filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35)); --flame-line: rgba(255, 255, 255, .4); }
+.inv:is(.is-open, .is-revealing) .royal-flame { animation: flameRise 1000ms cubic-bezier(.2, .8, .2, 1.2) 450ms both; }
+@keyframes flameRise { from { opacity: 0; transform: translate(-50%, -10%) scale(.4); } }
+.royal-corner { width: clamp(56px, 16cqw, 110px) !important; }
+.inv:is(.is-open, .is-revealing) .royal-corner { animation: tplFade 1200ms ease 900ms both; }
+.cover-royal .hx-text { padding-bottom: 40px; }
+.cover-royal .kicker { color: var(--gold); }
+.cover-royal .names .line > span {
+  background: linear-gradient(100deg, var(--gold) 38%, #FFF3D2 50%, var(--gold) 62%);
+  background-size: 320% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.inv:is(.is-open, .is-revealing) .cover-royal .names .line > span {
+  animation-name: lineUp, akShimmer; animation-duration: 1000ms, 1900ms;
+  animation-timing-function: cubic-bezier(.2, .75, .15, 1), ease-in-out; animation-fill-mode: both; animation-delay: 380ms, 1500ms;
+}
+.inv:is(.is-open, .is-revealing) .cover-royal .names .line:nth-child(2) > span { animation-delay: 500ms, 1600ms; }
+.inv:is(.is-open, .is-revealing) .cover-royal .names .line:nth-child(3) > span { animation-delay: 600ms, 1700ms; }
+.gp-royal { padding: 10px 26px 12px; border: 1px solid var(--gold); outline: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); outline-offset: 3px; }
+.gp-royal .gp-name { color: var(--gold); }
+
+/* =================== STARLIGHT =================== */
+.cover-star .hero { position: absolute; inset: 0; }
+.star-shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 55%, transparent) 22%, transparent 42%, color-mix(in srgb, var(--bg) 70%, transparent) 62%, var(--bg) 90%); }
+.cover-star .cel-sky { z-index: 2; height: 46%; }
+.cover-star .hx-text { margin-top: auto; }
+.star-moon { display: block; width: 30px; height: 30px; border-radius: 50%; box-shadow: 8px 8px 0 0 var(--gold); transform: rotate(-30deg) translate(-4px, -4px); filter: drop-shadow(0 0 8px color-mix(in srgb, var(--gold) 70%, transparent)); margin-bottom: 4px; }
+.cover-star .kicker { color: var(--gold); }
+.cover-star .names .amp { color: var(--gold); }
+.cover-star .cover-date { color: var(--accent); }
+.gp-star { padding: 10px 28px 12px; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(4px); }
+
+/* =================== GOLDEN DECO =================== */
+.cover-gdeco { justify-content: center; }
+.cover-gdeco .hero { position: absolute; inset: 0; }
+.gdeco-shade { position: absolute; inset: 0; z-index: 1; background: radial-gradient(80% 60% at 50% 55%, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 55%, transparent) 70%, color-mix(in srgb, var(--bg) 80%, transparent)); }
+.gdeco-frame { position: absolute; inset: 22px; z-index: 2; border: 1px solid color-mix(in srgb, var(--gold) 80%, transparent); box-shadow: inset 0 0 0 5px transparent, inset 0 0 0 6px color-mix(in srgb, var(--gold) 35%, transparent); pointer-events: none; }
+.inv:is(.is-open, .is-revealing) .gdeco-frame { animation: gdFrame 1200ms cubic-bezier(.6, 0, .2, 1) 200ms both; }
+@keyframes gdFrame { from { clip-path: inset(50% 0 50% 0); opacity: 0; } to { clip-path: inset(0); opacity: 1; } }
+.cover-gdeco .deco-corner { z-index: 3; }
+.gd-burst { position: absolute; z-index: 2; top: 22px; left: 50%; width: min(80%, 380px); transform: translateX(-50%) scaleY(-1); pointer-events: none; }
+.gd-burst .deco-burst { position: static; transform: none; width: 100%; max-width: none; }
+.cover-gdeco .hx-text { padding: 0 44px; }
+.cover-gdeco .kicker { color: var(--gold); letter-spacing: .4em; }
+.cover-gdeco .names { font-size: clamp(30px, 8.6cqw, 58px); line-height: 1.15; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.inv:is(.is-open, .is-revealing) .cover-gdeco .names { animation: decoTrack 1600ms cubic-bezier(.2, .7, .2, 1) 600ms both; }
+.cover-gdeco .names .amp { font-family: var(--f-body); font-size: .38em; letter-spacing: .3em; color: var(--ink); }
+.cover-gdeco .hx-text .deco-rule { width: 190px; }
+.gp-gdeco { padding: 12px 30px; border: 1px solid var(--gold); background: color-mix(in srgb, var(--bg) 60%, transparent); }
+.gp-gdeco .gp-name { font-style: normal; font-family: var(--f-names); text-transform: uppercase; letter-spacing: .08em; font-size: clamp(18px, 5.4cqw, 26px); color: var(--gold); }
+
+/* =================== BLUSH PORTRAIT =================== */
+.cover-blush { padding-top: 26px; }
+.cover-blush .wc-a { top: -10cqw; }
+.blush-card {
+  position: relative; z-index: 2; flex: none; height: 46cqh; margin: 0 34px; border-radius: 26px;
+  border: 8px solid #fff; box-shadow: 0 30px 50px -28px color-mix(in srgb, var(--accent) 70%, #000); transform: rotate(-1.5deg);
+}
+.inv:is(.is-open, .is-revealing) .cover-blush .blush-card { animation: blushCard 1300ms cubic-bezier(.2, .8, .2, 1) 150ms both; }
+@keyframes blushCard { from { transform: rotate(4deg) translateY(30px) scale(.94); opacity: 0; } to { transform: rotate(-1.5deg); opacity: 1; } }
+.cover-blush .hx-text { margin-top: 18px; }
+.cover-blush .kicker { color: var(--accent); }
+.cover-blush .names { font-size: clamp(42px, 12.5cqw, 86px); line-height: 1; color: var(--accent); }
+.cover-blush .names .amp { color: var(--gold); }
+.cover-blush .cover-date { font-family: var(--f-display); font-size: 19px; letter-spacing: .04em; text-transform: none; }
+.gp-blush { padding: 10px 28px 12px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* =================== CINEMA LOVE =================== */
+.cover-cinema { justify-content: flex-end; background: #000; }
+.cover-cinema .hero { position: absolute; inset: 0; }
+.inv:is(.is-open, .is-revealing) .cover-cinema .hero { animation: fromBlack 1800ms ease 300ms both; }
+@keyframes fromBlack { from { opacity: 0; filter: brightness(0); } to { opacity: 1; filter: brightness(1); } }
+.cine-shade {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--bg) 85%, transparent) 78%), radial-gradient(120% 90% at 50% 40%, transparent 50%, rgba(0, 0, 0, .55));
+}
+.cine-shade::after {
+  content: ""; position: absolute; inset: 0; opacity: .35; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+.cine-bar { position: absolute; left: 0; right: 0; z-index: 4; height: 9cqh; background: #050505; display: grid; place-items: center; }
+.cine-top { top: 0; }
+.cine-bottom { bottom: 0; }
+.cine-top span { font: 500 11px/1 var(--f-body); letter-spacing: .5em; text-transform: uppercase; color: var(--gold); }
+.inv.lang-km .cine-top span { letter-spacing: 0; text-transform: none; font-size: 14px; font-family: 'Moul', var(--f-display); }
+.inv:is(.is-open, .is-revealing) .cine-top { animation: barTop 900ms cubic-bezier(.6, 0, .2, 1) both; }
+.inv:is(.is-open, .is-revealing) .cine-bottom { animation: barBottom 900ms cubic-bezier(.6, 0, .2, 1) both; }
+@keyframes barTop { from { transform: translateY(-100%); } }
+@keyframes barBottom { from { transform: translateY(100%); } }
+.cover-cinema .hx-text { padding-bottom: calc(9cqh + 26px); }
+.cover-cinema .kicker { color: var(--gold); letter-spacing: .4em; }
+.cover-cinema .names { font-size: clamp(40px, 12cqw, 84px); line-height: 1; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); text-shadow: 0 4px 30px rgba(0, 0, 0, .5); }
+.inv:is(.is-open, .is-revealing) .cover-cinema .names { animation: cineTitle 1600ms ease 700ms both; }
+@keyframes cineTitle { from { filter: blur(10px); opacity: 0; letter-spacing: .3em; } }
+.cover-cinema .names .amp { color: var(--gold); font-style: italic; text-transform: none; }
+.cover-cinema .cover-date { color: var(--accent); letter-spacing: .3em; font-size: 12px; }
+.gp-cinema {
+  position: relative; padding: 10px 30px 12px; border: 1.5px dashed color-mix(in srgb, var(--gold) 80%, transparent); border-radius: 8px;
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+.gp-cinema .gp-label { letter-spacing: .4em; }
+.gp-cinema .gp-name { color: var(--ink); }
+.inv.lang-km .cover-cinema :is(.names, .kicker, .cover-date) { letter-spacing: 0; animation-name: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-hx .hero, .cover-hx .hero-img img, .cover-ivory .hx-text, .garden-sprig, .royal-flame, .royal-corner, .gdeco-frame,
+  .blush-card, .cine-bar, .cover-cinema .names, .cover-gdeco .names, .cover-royal .names .line > span { animation: none !important; }
+}
+.cover-garden .hx-text { padding-top: 70px; background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--bg) 88%, transparent) 34%, var(--bg) 60%); }

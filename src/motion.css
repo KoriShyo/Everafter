@@ -1,0 +1,102 @@
+/* =====================================================================
+   Motion pass — one easing language, a clear focal point per beat.
+   Beat 1  envelope: press → pop → fold → rise (with settle) → push into card
+   Beat 2  cover:    photo → names (hero) → supporting text → guest name (payoff)
+   Beat 3  sections: label → heading → content items cascade as they scroll in
+   ===================================================================== */
+.inv {
+  --e-out: cubic-bezier(.16, 1, .3, 1);       /* quick arrival, long settle */
+  --e-inout: cubic-bezier(.65, 0, .35, 1);
+  --e-back: cubic-bezier(.34, 1.4, .64, 1);   /* small overshoot, then settle */
+  --e-in: cubic-bezier(.55, 0, 1, .45);
+}
+
+/* ---------------- Beat 1 · envelope ---------------- */
+/* seal: a short press (anticipation) before it pops off */
+.inv .phase-opening .env-seal { animation: sealPressPop 560ms var(--e-inout) forwards; }
+.inv .phase-leaving .env-seal { animation: none; opacity: 0; }
+@keyframes sealPressPop {
+  0% { transform: scale(1); opacity: 1; }
+  20% { transform: scale(.9); opacity: 1; }
+  44% { transform: scale(1.16); opacity: 1; }
+  100% { transform: translateY(30px) rotate(-16deg) scale(.5); opacity: 0; }
+}
+/* gold ripple when the seal breaks */
+.inv .env-seal::after {
+  content: ""; position: absolute; inset: -6%; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--gold) 90%, #fff); opacity: 0; pointer-events: none;
+}
+.inv .phase-opening .env-seal::after { animation: sealRipple 700ms var(--e-out) 120ms both; }
+@keyframes sealRipple { from { transform: scale(.7); opacity: .9; } to { transform: scale(2.1); opacity: 0; } }
+
+/* flap folds once the seal has popped */
+.inv .phase-opening .env-flap, .inv .phase-leaving .env-flap { animation-delay: 300ms; animation-duration: 600ms; }
+.inv .phase-opening .flap-front, .inv .phase-leaving .flap-front,
+.inv .phase-opening .flap-back, .inv .phase-leaving .flap-back { animation-delay: 300ms; animation-duration: 600ms; }
+.inv .env-flap { transition: z-index 0s 600ms; }
+
+/* card rises with a small overshoot and settles */
+.inv .env-card { transition: transform 620ms var(--e-back) 640ms, opacity 400ms ease, box-shadow 600ms ease 640ms; }
+
+/* push into the card: envelope drops away, the card comes toward the viewer */
+.inv .phase-leaving .env-wrap { transform: none; }
+.inv .phase-leaving .env-card { transform: translateY(-44%) scale(1.9); opacity: 0; transition: transform 460ms var(--e-in), opacity 420ms ease 60ms; }
+.inv .phase-leaving :is(.env-pocket, .env-back, .env-flap) { opacity: 0; transition: opacity 320ms ease; }
+.inv .phase-leaving .env { transform: translateY(34%); transition: transform 460ms var(--e-in); }
+.inv .phase-leaving .env-decor { opacity: 0; transition: opacity 380ms ease; }
+.inv .env-stage.phase-leaving { transition: opacity 420ms ease 120ms; }
+
+/* ---------------- Beat 2 · cover ---------------- */
+.inv:is(.is-open, .is-revealing) .cv { animation-duration: 1000ms; animation-timing-function: var(--e-out); }
+.inv:is(.is-open, .is-revealing) .names .line > span { animation-duration: 1150ms; animation-timing-function: var(--e-out); }
+/* the guest's own name is the payoff: it sharpens into focus, then a gold rule draws under it */
+.guest-plate .gp-name { position: relative; }
+.guest-plate .gp-name::after {
+  content: ""; display: block; height: 1px; width: 56%; margin: 6px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+}
+.gp-editorial .gp-name::after { margin-left: 0; }
+.inv:is(.is-open, .is-revealing) .cover .gp-name { animation: gpFocus 1100ms var(--e-out) 950ms both; }
+.inv:is(.is-open, .is-revealing) .cover .gp-name::after { animation: gpRule 900ms var(--e-out) 1450ms both; }
+@keyframes gpFocus { from { opacity: 0; filter: blur(6px); transform: translateY(6px); } }
+@keyframes gpRule { to { transform: scaleX(1); } }
+
+/* ---------------- Beat 3 · sections build piece by piece ---------------- */
+.inv.rv-ready .rv:not(.sec-gallery):not(.in) { opacity: 1; transform: none; }
+.inv.rv-ready .rv:not(.sec-gallery) :is(.sh > *, .greet-dear, .greet-body, .story, .detail, .schedule > li, .loc > *, .closing, .sign, .sign-names, .mono-seal) {
+  transition: opacity 700ms var(--e-out), transform 900ms var(--e-out);
+}
+.inv.rv-ready .rv:not(.sec-gallery):not(.in) :is(.sh > *, .greet-dear, .greet-body, .story, .detail, .schedule > li, .loc > *, .closing, .sign, .sign-names) {
+  opacity: 0; transform: translateY(18px);
+}
+.inv.rv-ready .rv:not(.sec-gallery):not(.in) .mono-seal { opacity: 0; transform: scale(.4); }
+.inv.rv-ready .rv:not(.sec-gallery).in .mono-seal { transition: opacity 500ms ease 700ms, transform 700ms var(--e-back) 700ms; }
+/* heading cascade */
+.inv.rv-ready .rv .sh > :nth-child(2) { transition-delay: 70ms; }
+.inv.rv-ready .rv .sh > :nth-child(3) { transition-delay: 140ms; }
+.inv.rv-ready .rv .sh > :nth-child(4) { transition-delay: 210ms; }
+/* body follows the heading */
+.inv.rv-ready .rv :is(.greet-dear, .loc > :nth-child(1), .closing) { transition-delay: 200ms; }
+.inv.rv-ready .rv :is(.greet-body, .story, .loc > :nth-child(2), .sign) { transition-delay: 300ms; }
+.inv.rv-ready .rv :is(.loc > :nth-child(3), .sign-names) { transition-delay: 400ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(1) { transition-delay: 240ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(2) { transition-delay: 330ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(3) { transition-delay: 420ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(4) { transition-delay: 510ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(5) { transition-delay: 600ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(6) { transition-delay: 690ms; }
+.inv.rv-ready .rv :is(.detail, .schedule > li):nth-child(n + 7) { transition-delay: 780ms; }
+/* romance timeline: the line draws down as the rows arrive */
+.t-romance .schedule::before { transform-origin: top; transition: transform 1100ms var(--e-out) 200ms; }
+.inv.rv-ready .t-romance .rv:not(.in) .schedule::before,
+.inv.rv-ready.t-romance .rv:not(.in) .schedule::before { transform: scaleY(0); }
+/* flourish / ornaments draw in */
+.inv.rv-ready .rv:not(.in) .flourish { clip-path: inset(0 50% 0 50%); }
+.inv.rv-ready .rv .flourish { transition: clip-path 900ms var(--e-out) 180ms; clip-path: inset(0 0 0 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .inv .rv *, .inv .rv { opacity: 1 !important; transform: none !important; transition: none !important; clip-path: none !important; }
+  .guest-plate .gp-name::after { transform: none; }
+  .inv .cover .gp-name, .inv .cover .gp-name::after, .inv .env-seal::after { animation: none !important; }
+}

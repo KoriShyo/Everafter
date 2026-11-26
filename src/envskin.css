@@ -1,0 +1,149 @@
+/* ================= Envelope screen: ornate Khmer-inspired skin =================
+   Colours follow the template palette (--bg, --gold, --ink), so crimson templates
+   read as crimson & gold, light templates stay light. */
+
+.inv .env-stage {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-color: var(--bg);
+  background-image:
+    var(--grain),
+    radial-gradient(ellipse 70% 55% at 50% 42%, color-mix(in srgb, var(--bg) 82%, #ffd2a8 10%), transparent 70%),
+    radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, color-mix(in srgb, var(--bg) 55%, #000) 100%);
+  background-blend-mode: soft-light, normal, normal;
+}
+
+/* ---------- frame, corners, embossed motifs ---------- */
+.env-decor { position: absolute; inset: 0; pointer-events: none; color: var(--gold); }
+.env-rule { position: absolute; border: 1px solid color-mix(in srgb, var(--gold) 85%, transparent); }
+.env-rule-1 { inset: 14px; }
+.env-rule-2 { inset: 20px; opacity: .5; }
+.env-corner {
+  position: absolute; width: clamp(64px, 19cqw, 132px); height: auto; color: var(--gold);
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .35)) drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 25%, transparent));
+}
+.env-corner.c-tl { top: 6px; left: 6px; }
+.env-corner.c-tr { top: 6px; right: 6px; transform: scaleX(-1); }
+.env-corner.c-bl { bottom: 6px; left: 6px; transform: scaleY(-1); }
+.env-corner.c-br { bottom: 6px; right: 6px; transform: scale(-1, -1); }
+.emboss {
+  position: absolute; color: color-mix(in srgb, var(--bg) 80%, #000); opacity: .5;
+  --flame-line: color-mix(in srgb, var(--bg) 70%, #fff 14%);
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, var(--bg) 70%, #fff 18%));
+}
+.emboss.e-top { width: clamp(70px, 20cqw, 130px); top: 9%; left: 50%; transform: translateX(-50%); }
+.emboss.e-left { width: clamp(80px, 22cqw, 170px); top: 34%; left: 3%; transform: rotate(-12deg); opacity: .35; }
+.emboss.e-right { width: clamp(80px, 22cqw, 170px); top: 34%; right: 3%; transform: rotate(12deg) scaleX(-1); opacity: .35; }
+
+/* ---------- heading & button ---------- */
+.inv .env-wrap { position: relative; gap: 30px; }
+.inv .env-for-label { font-family: var(--f-display); color: var(--gold); font-size: 14px; letter-spacing: .34em; text-shadow: 0 1px 0 rgba(0, 0, 0, .3); }
+.inv.lang-km .env-for-label { font-family: 'Moul', var(--f-display); font-size: clamp(22px, 6.4cqw, 32px); letter-spacing: 0; line-height: 1.7; }
+.inv .env-for-name { color: var(--ink); }
+.inv .env-open {
+  min-width: 210px; padding: 16px 34px; border-radius: 12px;
+  border: 1.5px solid color-mix(in srgb, var(--gold) 88%, transparent);
+  background: rgba(0, 0, 0, .12);
+  color: color-mix(in srgb, var(--gold) 72%, var(--ink));
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .06), inset 0 0 0 4px color-mix(in srgb, var(--gold) 22%, transparent);
+  font-size: 13px; letter-spacing: .2em;
+}
+.inv .env-open:hover, .inv .env-open:focus-visible { background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--ink); }
+.inv.lang-km .env-open { font-size: 18px; letter-spacing: 0; padding: 14px 34px; }
+
+/* ---------- envelope paper ---------- */
+.inv .env {
+  --env: #F2E8D6; --env-dark: #E6D8BF;
+  --w: min(78cqw, 460px, 78cqh);
+  width: var(--w);
+  filter: drop-shadow(0 26px 34px rgba(0, 0, 0, .32)) drop-shadow(0 4px 8px rgba(0, 0, 0, .18));
+}
+.inv .env-back { background-color: var(--env-dark); }
+.inv .env-pocket {
+  background-color: var(--env);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+/* bottom & side folds */
+.inv .env-pocket::before { content: ""; position: absolute; inset: 0; clip-path: polygon(0 100%, 50% 52%, 100% 100%); background: linear-gradient(0deg, rgba(90, 60, 30, .06), rgba(90, 60, 30, .02)); }
+.inv .env-pocket::after { background: linear-gradient(90deg, rgba(90, 60, 30, .05), transparent 18%, transparent 82%, rgba(90, 60, 30, .05)); }
+.inv .flap-front {
+  background-color: color-mix(in srgb, var(--env) 97%, #000);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(255, 255, 255, .25), rgba(90, 60, 30, .05));
+}
+.flap-filigree { position: absolute; inset: 0; width: 100%; height: 100%; color: #B8893F; }
+.flap-filigree .flap-flame { opacity: .95; }
+
+/* ---------- gold wax seal ---------- */
+.inv .env-seal {
+  width: clamp(66px, 17%, 88px); height: auto; aspect-ratio: 1; margin: 0; translate: -50% -50%; background: none; box-shadow: none;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .35)) drop-shadow(0 8px 12px rgba(0, 0, 0, .2));
+}
+.wax { width: 100%; height: 100%; display: block; overflow: visible; }
+.wax-heart { fill: #7A1522; }
+@keyframes sealHint {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.1); filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .35)) drop-shadow(0 0 14px color-mix(in srgb, var(--gold) 70%, transparent)); }
+  60% { transform: scale(.97); }
+}
+
+/* entrance for the frame */
+.phase-closed .env-decor { animation: envDecorIn 1100ms ease both; }
+@keyframes envDecorIn { from { opacity: 0; } }
+.phase-closed .env-corner.c-tl, .phase-closed .env-corner.c-br { animation: cornerIn 1000ms cubic-bezier(.2, .7, .2, 1) 150ms both; }
+.phase-closed .env-corner.c-tr, .phase-closed .env-corner.c-bl { animation: cornerIn 1000ms cubic-bezier(.2, .7, .2, 1) 300ms both; }
+@keyframes cornerIn { from { opacity: 0; scale: .6; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .env-decor, .env-corner { animation: none !important; }
+}
+
+/* ---------- opening: keep the rising card on screen ---------- */
+.inv .phase-opening .env, .inv .phase-leaving .env { transform: translateY(26%); transition: transform 760ms cubic-bezier(.3, .7, .2, 1) 360ms; }
+.inv .phase-opening .env-for, .inv .phase-leaving .env-for { transform: translateY(-14px); }
+
+/* ---------- card & lining to match the ornate skin ---------- */
+.inv .env-card {
+  background-color: #FFFCF5;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(214, 170, 90, .14), transparent 60%);
+  gap: 6px;
+}
+.inv .env-card::after { inset: 7px; border: 1px solid rgba(184, 137, 63, .75); }
+.inv .env-card::before { content: ""; position: absolute; inset: 11px; border: 1px solid rgba(184, 137, 63, .35); pointer-events: none; }
+.inv .env-card-k { color: #9A7230; }
+.inv.lang-km .env-card-k { font-family: 'Moul', var(--f-display); font-size: 12px; }
+.inv .env-card-n { color: #6E1620; }
+.env-card-flame { width: 22px; height: auto; color: #B8893F; margin: 0 auto 2px; display: block; }
+.inv .env-liner, .inv .flap-back {
+  background:
+    repeating-linear-gradient(45deg, rgba(216, 176, 98, .35) 0 1.5px, transparent 1.5px 11px),
+    repeating-linear-gradient(-45deg, rgba(216, 176, 98, .35) 0 1.5px, transparent 1.5px 11px),
+    radial-gradient(ellipse at 50% 20%, #8E1C28, #5E0F18);
+}
+
+/* ---------- flap: device-independent fold (no 3D backface tricks) ----------
+   Folds up around its top edge: shrinks to a line, then grows upward showing the lining. */
+.inv .env-flap { transform-style: flat; transform: none; transition: z-index 0s 540ms; }
+.inv .flap-back { transform: none; opacity: 0; }
+.inv .phase-opening .env-flap, .inv .phase-leaving .env-flap { transform: none; z-index: 0; animation: flapFold 640ms linear 220ms both; }
+.inv .phase-opening .flap-front, .inv .phase-leaving .flap-front { animation: faceOut 640ms linear 220ms both; }
+.inv .phase-opening .flap-back, .inv .phase-leaving .flap-back { animation: faceIn 640ms linear 220ms both; }
+@keyframes flapFold {
+  0% { transform: scaleY(1); animation-timing-function: cubic-bezier(.55, 0, .9, .5); }
+  50% { transform: scaleY(.02); animation-timing-function: cubic-bezier(.1, .5, .45, 1); }
+  100% { transform: scaleY(-1); }
+}
+@keyframes faceOut { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes faceIn { 0%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
+/* soft gold striped lining, as in the reference */
+.inv .env-liner, .inv .flap-back {
+  background:
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, .35) 0 6px, transparent 6px 14px),
+    linear-gradient(180deg, #E9D3A4, #DCC08A);
+}
+@media (prefers-reduced-motion: reduce) {
+  .inv .phase-opening .env-flap, .inv .phase-leaving .env-flap { animation: none; transform: scaleY(-1); }
+  .inv .phase-opening .flap-front, .inv .phase-leaving .flap-front { animation: none; opacity: 0; }
+  .inv .phase-opening .flap-back, .inv .phase-leaving .flap-back { animation: none; opacity: 1; }
+}
+.inv .phase-opening .env-card, .inv .phase-leaving .env-card { transform: translateY(-44%) scale(1.01); }

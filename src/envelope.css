@@ -1,0 +1,80 @@
+/* ================= Envelope choreography =================
+   closed  → envelope rises in, seal pulses once as an invitation to tap
+   opening → seal pops & drops (0–380ms), flap folds back in 3D (220–860ms),
+             card slides out while the envelope sinks (640–1180ms)
+   leaving → camera moves into the card while the stage dissolves (1100–1500ms)
+   open    → cover text reveal takes over */
+
+.env-stage { perspective: 1400px; overflow: hidden; }
+.env-wrap { transition: transform 520ms cubic-bezier(.4, 0, .2, 1), opacity 420ms ease; }
+
+/* ---------- entrance ---------- */
+.phase-closed .env-for { animation: envFadeUp 700ms cubic-bezier(.2, .7, .2, 1) 100ms both; }
+.phase-closed .env { animation: envRise 1000ms cubic-bezier(.2, .7, .2, 1) 220ms both; }
+.phase-closed .env-open { animation: envFadeUp 700ms cubic-bezier(.2, .7, .2, 1) 650ms both; }
+.phase-closed .env-seal { animation: sealHint 1100ms ease-in-out 2000ms 1 both; }
+@keyframes envFadeUp { from { opacity: 0; transform: translateY(12px); } }
+@keyframes envRise { from { opacity: 0; transform: translateY(34px) rotateX(18deg) rotate(-1.2deg); } }
+@keyframes sealHint {
+  0%, 100% { transform: scale(1); box-shadow: 0 2px 6px rgba(0, 0, 0, .25), inset 0 0 0 4px rgba(0, 0, 0, .12), 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); }
+  35% { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0, 0, 0, .25), inset 0 0 0 4px rgba(0, 0, 0, .12), 0 0 0 10px color-mix(in srgb, var(--accent) 0%, transparent); }
+  60% { transform: scale(.97); }
+}
+
+/* ---------- envelope parts ---------- */
+.env { transform-style: preserve-3d; transition: transform 700ms cubic-bezier(.3, .7, .2, 1), filter 600ms ease; }
+.env-back { overflow: hidden; }
+.env-liner {
+  position: absolute; inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 58%);
+  background:
+    radial-gradient(circle at 50% 0, color-mix(in srgb, var(--gold) 35%, transparent), transparent 60%),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 22%, transparent) 0 6px, transparent 6px 14px),
+    color-mix(in srgb, var(--accent) 10%, #f4ecdf);
+}
+.env-flap {
+  background: none; clip-path: none; transform-style: preserve-3d;
+  transition: transform 640ms cubic-bezier(.6, .05, .25, 1) 220ms, z-index 0s 520ms;
+}
+.flap-face { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 50% 100%); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flap-front {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--env) 86%, #000) 0%, color-mix(in srgb, var(--env) 95%, #000) 100%);
+}
+.flap-front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, .06)); }
+.flap-back {
+  transform: rotateX(180deg);
+  background:
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--accent) 22%, transparent) 0 6px, transparent 6px 14px),
+    color-mix(in srgb, var(--accent) 10%, #f4ecdf);
+}
+.env-card { transition: transform 620ms cubic-bezier(.25, .8, .25, 1) 640ms, box-shadow 620ms ease 640ms; }
+.env-pocket { transition: transform 560ms cubic-bezier(.4, 0, .2, 1) 760ms; }
+.env-back { transition: transform 560ms cubic-bezier(.4, 0, .2, 1) 760ms; }
+
+/* ---------- opening ---------- */
+.phase-opening .env-seal, .phase-leaving .env-seal { animation: sealBreak 380ms cubic-bezier(.5, 0, .7, .4) forwards; }
+@keyframes sealBreak {
+  0% { transform: scale(1); opacity: 1; }
+  35% { transform: scale(1.16); opacity: 1; }
+  100% { transform: translateY(26px) rotate(-18deg) scale(.5); opacity: 0; }
+}
+.phase-opening .env-flap, .phase-leaving .env-flap { transform: rotateX(-180deg); z-index: 0; }
+.phase-opening .env-card, .phase-leaving .env-card { transform: translateY(-62%) scale(1.02); box-shadow: 0 18px 40px -18px rgba(30, 10, 12, .45); }
+.phase-opening .env-pocket, .phase-leaving .env-pocket,
+.phase-opening .env-back, .phase-leaving .env-back { transform: translateY(7%); }
+.phase-opening .env-open, .phase-leaving .env-open { opacity: 0; transform: translateY(8px); transition: opacity 240ms ease, transform 240ms ease; }
+.phase-opening .env-for, .phase-leaving .env-for { opacity: 0; transform: translateY(-8px); transition: opacity 300ms ease 120ms, transform 300ms ease 120ms; }
+
+/* ---------- leaving: move into the card ---------- */
+.phase-leaving { opacity: 0; transform: none; transition: opacity 420ms ease 60ms; }
+.phase-leaving .env-wrap { transform: translateY(14%) scale(1.55); }
+
+/* the cover underneath settles forward as the envelope dissolves */
+.inv.is-revealing .inv-body { animation: coverSettle 700ms cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes coverSettle { from { transform: scale(1.04); filter: blur(2px); } to { transform: none; filter: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .env-stage *, .env-stage { animation: none !important; transition: none !important; }
+  .inv.is-revealing .inv-body { animation: none !important; }
+}
+.phase-leaving .env-seal { animation: none; opacity: 0; }

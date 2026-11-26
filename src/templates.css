@@ -1,0 +1,238 @@
+/* =====================================================================
+   Five additional templates: Angkor Heritage · Celestial Night ·
+   Gatsby Deco · Watercolor Blush · Film Diary
+   Cover animations run once, when the invitation opens (.is-open / .is-revealing).
+   ===================================================================== */
+
+/* ---------- shared ---------- */
+@keyframes tplDraw { to { stroke-dashoffset: 0; } }
+@keyframes tplFade { from { opacity: 0; } to { opacity: 1; } }
+:is(.t-angkor, .t-celestial, .t-deco, .t-watercolor, .t-film) .sec { text-align: center; }
+:is(.t-angkor, .t-celestial, .t-deco, .t-watercolor, .t-film) :is(.greet-body, .story) { margin-left: auto; margin-right: auto; max-width: 34em; }
+:is(.t-angkor, .t-celestial, .t-deco, .t-watercolor, .t-film) .loc { justify-items: center; }
+:is(.t-angkor, .t-celestial, .t-deco, .t-watercolor, .t-film) .schedule { max-width: 480px; margin: 0 auto; }
+.sh-c { display: grid; justify-items: center; gap: 8px; }
+.sh-c .sh-label { color: var(--accent); }
+
+/* dark templates */
+:is(.t-angkor, .t-celestial, .t-deco) .env { --env: #F3E8D8; --env-dark: #E4D3BA; }
+:is(.t-angkor, .t-celestial, .t-deco) .env-card-n { color: #4a1418; }
+:is(.t-angkor, .t-celestial, .t-deco) .env-seal { color: #3B0E19; }
+:is(.t-angkor, .t-celestial, .t-deco) .sh-label { color: var(--gold); }
+:is(.t-angkor, .t-celestial, .t-deco) .details { border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); padding: 8px 24px; background: color-mix(in srgb, #000 14%, transparent); }
+:is(.t-angkor, .t-celestial, .t-deco) .detail:last-child { border-bottom: 0; }
+
+/* =================== ANGKOR HERITAGE =================== */
+.cover-angkor { display: flex; align-items: center; justify-content: center; padding: 40px 34px; text-align: center; overflow: hidden; }
+.ak-frame { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); color: var(--gold); pointer-events: none; }
+.ak-line { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.ak-line-2 { opacity: .55; }
+.inv:is(.is-open, .is-revealing) .ak-line { animation: tplDraw 1900ms cubic-bezier(.6, 0, .2, 1) 150ms both; }
+.inv:is(.is-open, .is-revealing) .ak-line-2 { animation-delay: 400ms; }
+.inv:is(.is-open, .is-revealing) .ak-corner { animation-delay: 900ms; animation-duration: 1300ms; }
+.ak-inner { position: relative; display: grid; justify-items: center; gap: 10px; max-width: 520px; }
+.lotus { color: var(--gold); display: block; }
+.ak-lotus { width: 78px; height: auto; }
+.lp { transform-box: view-box; transform-origin: 60px 62px; }
+.lotus-base { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.inv:is(.is-open, .is-revealing) .cover-angkor .lp { animation: lotusBloom 900ms cubic-bezier(.2, .8, .2, 1.1) both; }
+.inv:is(.is-open, .is-revealing) .cover-angkor .lp-1 { animation-delay: 300ms; }
+.inv:is(.is-open, .is-revealing) .cover-angkor :is(.lp-2, .lp-3) { animation-delay: 460ms; }
+.inv:is(.is-open, .is-revealing) .cover-angkor :is(.lp-4, .lp-5) { animation-delay: 620ms; }
+.inv:is(.is-open, .is-revealing) .cover-angkor .lotus-base { animation: tplDraw 800ms ease 200ms both; }
+@keyframes lotusBloom { from { transform: scale(.15) rotate(0deg); opacity: 0; } }
+.cover-angkor .kicker { color: var(--gold); }
+.ak-arch {
+  width: min(52%, 220px, 29cqh); aspect-ratio: 3 / 4; padding: 3px;
+  clip-path: polygon(0 100%, 0 40%, 7% 28%, 18% 18%, 32% 9%, 50% 0, 68% 9%, 82% 18%, 93% 28%, 100% 40%, 100% 100%);
+  background: linear-gradient(180deg, var(--gold), color-mix(in srgb, var(--gold) 50%, var(--bg)));
+}
+.ak-photo { width: 100%; height: 100%; clip-path: polygon(0 100%, 0 40%, 7% 28%, 18% 18%, 32% 9%, 50% 0, 68% 9%, 82% 18%, 93% 28%, 100% 40%, 100% 100%); }
+.cover-angkor .names { font-size: clamp(38px, 10.5cqw, 74px); line-height: 1.05; }
+.cover-angkor .names .line > span, .cover-angkor .names .amp > span {
+  background: linear-gradient(100deg, var(--gold) 38%, #FFF3D2 50%, var(--gold) 62%);
+  background-size: 320% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.inv:is(.is-open, .is-revealing) .cover-angkor .names .line > span {
+  animation-name: lineUp, akShimmer; animation-duration: 1000ms, 1900ms;
+  animation-timing-function: cubic-bezier(.2, .75, .15, 1), ease-in-out; animation-fill-mode: both;
+  animation-delay: 380ms, 1500ms;
+}
+.inv:is(.is-open, .is-revealing) .cover-angkor .names .line:nth-child(2) > span { animation-delay: 500ms, 1600ms; }
+.inv:is(.is-open, .is-revealing) .cover-angkor .names .line:nth-child(3) > span { animation-delay: 600ms, 1700ms; }
+@keyframes akShimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.cover-angkor .cover-date { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+.gp-angkor { margin-top: 6px; padding: 10px 26px 12px; border: 1px solid var(--gold); outline: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); outline-offset: 3px; }
+.gp-angkor .gp-name { color: var(--gold); }
+.t-angkor .sec:nth-of-type(even) { background: color-mix(in srgb, #000 16%, transparent); max-width: none; }
+.t-angkor .sec:nth-of-type(even) > * { max-width: 700px; margin-left: auto; margin-right: auto; }
+.sh-lotus { width: 52px; }
+.t-angkor .sh h2 { color: var(--gold); }
+
+/* =================== CELESTIAL NIGHT =================== */
+.cover-celestial {
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 26px; overflow: hidden;
+  background: radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 62%);
+}
+.cel-sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.star { fill: var(--gold); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.inv:is(.is-open, .is-revealing) .star { animation: starIn 900ms ease var(--sd) forwards, starTwinkle 2600ms ease-in-out calc(var(--sd) + 900ms) 2; }
+@keyframes starIn { from { opacity: 0; transform: scale(.2); } to { opacity: .85; transform: none; } }
+@keyframes starTwinkle { 0%, 100% { opacity: .85; } 50% { opacity: .3; } }
+.inv:is(.is-open, .is-revealing) .sparkle { animation: sparkIn 1100ms cubic-bezier(.2, .8, .2, 1.2) var(--sd) forwards; }
+@keyframes sparkIn { from { opacity: 0; transform: scale(0) rotate(-90deg); } to { opacity: 1; transform: none; } }
+.constellation { stroke: var(--gold); stroke-width: .8; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .7; }
+.inv:is(.is-open, .is-revealing) .constellation { animation: tplDraw 2400ms cubic-bezier(.5, 0, .3, 1) 700ms both; }
+.c-dot { fill: var(--accent); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.inv:is(.is-open, .is-revealing) .c-dot { animation: starIn 500ms ease var(--sd) forwards; }
+.cel-inner { position: relative; display: grid; justify-items: center; gap: 12px; }
+.cel-moon-wrap { position: relative; width: min(46%, 220px, 30cqh); aspect-ratio: 1; margin-bottom: 8px; }
+.cel-photo {
+  position: absolute; inset: 0; border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 9px color-mix(in srgb, var(--bg) 70%, transparent), 0 0 0 10px color-mix(in srgb, var(--gold) 45%, transparent), 0 0 70px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.cel-crescent { position: absolute; z-index: 2; width: 30%; aspect-ratio: 1; right: -8%; top: -10%; border-radius: 50%; box-shadow: 9px 9px 0 0 var(--gold); transform: rotate(-30deg); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--gold) 60%, transparent)); }
+.inv:is(.is-open, .is-revealing) .cel-crescent { animation: moonRise 1600ms cubic-bezier(.2, .7, .2, 1) 500ms both; }
+@keyframes moonRise { from { opacity: 0; transform: translate(-30px, 40px) rotate(-70deg); } }
+.cover-celestial .kicker { color: var(--gold); }
+.cover-celestial .names { font-size: clamp(42px, 12cqw, 84px); }
+.cover-celestial .names .amp { color: var(--gold); }
+.cover-celestial .cover-date { font-size: 12.5px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); }
+.gp-celestial { margin-top: 6px; padding: 10px 28px 12px; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(3px); }
+.sh-spark { width: 18px; height: 18px; color: var(--gold); }
+.t-celestial .sh h2 { font-style: italic; }
+
+/* =================== GATSBY DECO =================== */
+.cover-deco { display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 30px; overflow: hidden; }
+.deco-corner { position: absolute; width: 58px; height: 58px; border: 1px solid var(--gold); pointer-events: none; }
+.deco-corner::after { content: ""; position: absolute; inset: 6px; border: inherit; border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.deco-corner.tl { top: 14px; left: 14px; border-right: 0; border-bottom: 0; transform-origin: top left; }
+.deco-corner.tl::after { border-right: 0; border-bottom: 0; }
+.deco-corner.tr { top: 14px; right: 14px; border-left: 0; border-bottom: 0; transform-origin: top right; }
+.deco-corner.tr::after { border-left: 0; border-bottom: 0; }
+.deco-corner.bl { bottom: 14px; left: 14px; border-right: 0; border-top: 0; transform-origin: bottom left; }
+.deco-corner.bl::after { border-right: 0; border-top: 0; }
+.deco-corner.br { bottom: 14px; right: 14px; border-left: 0; border-top: 0; transform-origin: bottom right; }
+.deco-corner.br::after { border-left: 0; border-top: 0; }
+.inv:is(.is-open, .is-revealing) .deco-corner { animation: decoCorner 900ms cubic-bezier(.6, 0, .2, 1) 150ms both; }
+@keyframes decoCorner { from { transform: scale(0); opacity: 0; } }
+.deco-inner { position: relative; display: grid; justify-items: center; gap: 10px; width: 100%; }
+.deco-top { position: relative; width: min(100%, 380px); display: grid; justify-items: center; }
+.deco-burst { position: absolute; left: 50%; bottom: 0; width: 150%; max-width: 560px; transform: translateX(-50%); color: var(--gold); pointer-events: none; }
+.ray { stroke: currentColor; stroke-width: .7; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .5; }
+.ray.arc { opacity: .35; }
+.inv:is(.is-open, .is-revealing) .ray { animation: tplDraw 1300ms cubic-bezier(.5, 0, .2, 1) calc(var(--rd, 0ms) + 250ms) both; }
+.deco-arch { position: relative; width: min(46%, 200px, 25cqh); aspect-ratio: 3 / 4; padding: 6px; border: 1px solid var(--gold); border-radius: 999px 999px 0 0; background: var(--bg); }
+.deco-photo { width: 100%; height: 100%; border-radius: 999px 999px 0 0; }
+.cover-deco .kicker { color: var(--gold); letter-spacing: .4em; }
+.cover-deco .names { font-size: clamp(30px, 8.6cqw, 58px); line-height: 1.15; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.inv:is(.is-open, .is-revealing) .cover-deco .names { animation: decoTrack 1600ms cubic-bezier(.2, .7, .2, 1) 600ms both; }
+@keyframes decoTrack { from { letter-spacing: .5em; opacity: .2; } }
+.cover-deco .names .amp { font-family: var(--f-body); font-size: .38em; letter-spacing: .3em; color: var(--ink); }
+.deco-rule { width: 210px; height: 20px; color: var(--gold); }
+.cover-deco .cover-date { font-size: 12.5px; letter-spacing: .26em; text-transform: uppercase; }
+.gp-deco { margin-top: 6px; padding: 12px 30px; border: 1px solid var(--gold); box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px color-mix(in srgb, var(--gold) 55%, transparent); }
+.gp-deco .gp-name { font-style: normal; font-family: var(--f-names); text-transform: uppercase; letter-spacing: .08em; font-size: clamp(20px, 6cqw, 28px); color: var(--gold); }
+.t-deco .sh h2 { text-transform: uppercase; letter-spacing: .1em; font-size: clamp(22px, 6cqw, 34px); color: var(--gold); }
+.t-deco .sh .deco-rule { width: 160px; }
+
+/* =================== WATERCOLOR BLUSH =================== */
+.cover-watercolor { display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 26px; overflow: hidden; }
+.wc-defs { position: absolute; width: 0; height: 0; }
+.wc-wash { position: absolute; border-radius: 50%; filter: url(#wc-rough) blur(5px); mix-blend-mode: multiply; pointer-events: none; }
+.wc-a { width: 95cqw; height: 75cqw; left: -32cqw; top: -16cqw; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 55%, transparent), color-mix(in srgb, var(--accent) 18%, transparent) 62%, transparent); opacity: .6; }
+.wc-b { width: 85cqw; height: 85cqw; right: -36cqw; bottom: -20cqw; background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 60%, transparent), color-mix(in srgb, var(--gold) 20%, transparent) 60%, transparent); opacity: .55; }
+.wc-c { width: 52cqw; height: 42cqw; right: -8cqw; top: 6cqh; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 35%, var(--gold)), transparent); opacity: .3; }
+.inv:is(.is-open, .is-revealing) .wc-wash { animation: washBloom 1900ms cubic-bezier(.2, .7, .2, 1) both; }
+.inv:is(.is-open, .is-revealing) .wc-b { animation-delay: 250ms; }
+.inv:is(.is-open, .is-revealing) .wc-c { animation-delay: 500ms; }
+@keyframes washBloom { from { transform: scale(.35); opacity: 0; } }
+.wc-inner { position: relative; display: grid; justify-items: center; gap: 12px; }
+.wc-blob { width: min(58%, 250px, 33cqh); aspect-ratio: 4 / 5; }
+.wc-photo { width: 100%; height: 100%; border-radius: 47% 53% 42% 58% / 52% 44% 56% 48%; box-shadow: 0 24px 44px -24px color-mix(in srgb, var(--accent) 60%, transparent); }
+.inv:is(.is-open, .is-revealing) .wc-photo { animation: blobSettle 2400ms ease-in-out 300ms both; }
+@keyframes blobSettle {
+  0% { border-radius: 30% 70% 62% 38% / 48% 36% 64% 52%; transform: scale(.92); }
+  50% { border-radius: 58% 42% 38% 62% / 40% 58% 42% 60%; }
+  100% { border-radius: 47% 53% 42% 58% / 52% 44% 56% 48%; transform: none; }
+}
+.cover-watercolor .kicker { color: var(--accent); }
+.cover-watercolor .names { font-size: clamp(46px, 13cqw, 92px); line-height: 1.05; color: var(--accent); }
+.cover-watercolor .names .amp { color: var(--gold); }
+.cover-watercolor .cover-date { font-family: var(--f-display); font-size: 20px; }
+.gp-watercolor { margin-top: 4px; padding: 10px 28px 12px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.sh-watercolor { position: relative; }
+.sh-brush { width: 160px; height: 22px; color: color-mix(in srgb, var(--accent) 22%, transparent); margin-bottom: -30px; }
+.sh-watercolor .sh-label { position: relative; }
+.t-watercolor .sh h2 { color: var(--accent); }
+.t-watercolor .details { gap: 12px; }
+.t-watercolor .detail { border: 0; border-radius: 22px; padding: 16px; background: color-mix(in srgb, var(--accent) 8%, transparent); }
+@container (min-width: 720px) { .t-watercolor .details { grid-template-columns: repeat(3, 1fr); } }
+
+/* =================== FILM DIARY =================== */
+.cover-film { display: flex; align-items: center; justify-content: center; text-align: center; padding: 34px 24px; overflow: hidden; }
+.film-inner { position: relative; display: grid; justify-items: center; gap: 12px; width: 100%; }
+.film-stamp {
+  position: absolute; top: 0; right: 4%; z-index: 3; font-family: var(--f-names); font-size: 22px; line-height: 1.1;
+  color: var(--accent); border: 2px dashed var(--accent); border-radius: 10px; padding: 4px 12px; transform: rotate(9deg); opacity: 0;
+}
+.inv:is(.is-open, .is-revealing) .film-stamp { animation: stampIn 520ms cubic-bezier(.3, 1.6, .5, 1) 1300ms both; }
+@keyframes stampIn { from { transform: rotate(9deg) scale(1.9); opacity: 0; } to { transform: rotate(9deg) scale(1); opacity: .92; } }
+.polaroid { position: relative; width: min(62%, 250px, 34cqh); padding: 10px 10px 44px; background: #fff; box-shadow: 0 16px 34px -16px rgba(0, 0, 0, .4); transform: rotate(-4deg); }
+.inv:is(.is-open, .is-revealing) .polaroid { animation: polDrop 1100ms cubic-bezier(.2, .9, .3, 1) 150ms both; }
+@keyframes polDrop {
+  0% { transform: translateY(-110%) rotate(14deg); opacity: 0; }
+  55% { transform: translateY(5%) rotate(-7deg); opacity: 1; }
+  78% { transform: translateY(-2%) rotate(-3deg); }
+  100% { transform: rotate(-4deg); opacity: 1; }
+}
+.pol-photo { width: 100%; aspect-ratio: 1; }
+.pol-cap { position: absolute; left: 0; right: 0; bottom: 8px; font-family: var(--f-names); font-size: 22px; color: #3a3a3a; }
+.tape { position: absolute; z-index: 2; width: 84px; height: 24px; background: color-mix(in srgb, var(--gold) 55%, rgba(255, 255, 255, .45)); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); transform: rotate(var(--tr)); transform-origin: center; }
+.tape-l { --tr: -32deg; top: -8px; left: -22px; }
+.tape-r { --tr: 30deg; top: -8px; right: -22px; }
+.inv:is(.is-open, .is-revealing) .cover-film .tape { animation: tapeIn 420ms cubic-bezier(.2, .8, .2, 1) both; }
+.inv:is(.is-open, .is-revealing) .cover-film .tape-l { animation-delay: 1050ms; }
+.inv:is(.is-open, .is-revealing) .cover-film .tape-r { animation-delay: 1160ms; }
+@keyframes tapeIn { from { transform: rotate(var(--tr)) scaleX(0); opacity: 0; } to { transform: rotate(var(--tr)) scaleX(1); opacity: 1; } }
+.cover-film .names { font-size: clamp(46px, 13cqw, 84px); line-height: 1; font-weight: 500; }
+.cover-film .names .amp { color: var(--accent); font-family: var(--f-names); font-style: normal; }
+.film-ticket { display: inline-flex; border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent); border-radius: 6px; overflow: hidden; font: 600 13px/1 var(--f-body); letter-spacing: .14em; }
+.film-ticket span { padding: 9px 14px; }
+.film-ticket span + span { border-left: 1px dashed color-mix(in srgb, var(--ink) 45%, transparent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.gp-film { margin-top: 4px; padding: 8px 24px 10px; background: #fff; border-radius: 4px; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, .35); transform: rotate(1.5deg); }
+.gp-film .gp-label { color: var(--accent); }
+.gp-film .gp-name { font-family: var(--f-names); font-style: normal; font-size: clamp(26px, 8cqw, 36px); color: #2a2a2a; }
+.sh-film .sh-label { display: inline-block; padding: 4px 16px; color: var(--ink); background: color-mix(in srgb, var(--gold) 50%, rgba(255, 255, 255, .5)); transform: rotate(-2deg); }
+.t-film .sh h2 { font-size: clamp(36px, 10cqw, 52px); }
+.t-film .detail { border: 0; margin: 8px auto; max-width: 420px; background: #fff; padding: 14px 18px; box-shadow: 0 6px 18px -10px rgba(0, 0, 0, .3); }
+.t-film .detail:nth-child(odd) { transform: rotate(-1deg); }
+.t-film .detail:nth-child(even) { transform: rotate(1deg); }
+
+/* Film Diary gallery: scattered snapshots */
+.snaps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px 18px; padding: 14px 6px; }
+.snap { position: relative; margin: 0; padding: 8px 8px 36px; background: #fff; box-shadow: 0 12px 26px -14px rgba(0, 0, 0, .4); transform: rotate(var(--rot)); }
+.snap .g-open { aspect-ratio: 1; }
+.snap .tape-c { --tr: -4deg; top: -12px; left: 50%; margin-left: -42px; }
+.snap-cap { position: absolute; left: 0; right: 0; bottom: 6px; font-family: var(--f-names); font-size: 20px; color: #555; }
+.inv.rv-ready .sec-gallery .snaps .g-photo { clip-path: none; }
+.inv.rv-ready .sec-gallery:not(.in) .snap { opacity: 0; }
+.inv.rv-ready .sec-gallery.in .snap { animation: snapDrop 850ms cubic-bezier(.2, .9, .3, 1.15) backwards; animation-delay: calc(var(--gi) * 170ms + 100ms); }
+@keyframes snapDrop { from { opacity: 0; transform: translateY(-50px) rotate(calc(var(--rot) * -3)) scale(1.08); } }
+@container (min-width: 720px) { .snaps { grid-template-columns: repeat(3, 1fr); gap: 36px 26px; } }
+
+/* Khmer: never letter-space Khmer script */
+.inv.lang-km :is(.cover-deco .names, .cover-deco .kicker, .cover-angkor .cover-date, .cover-celestial .cover-date, .cover-deco .cover-date, .film-ticket) { letter-spacing: 0; text-transform: none; }
+.inv.lang-km .cover-deco .names { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-line, .lotus-base, .constellation, .ray { stroke-dashoffset: 0 !important; animation: none !important; }
+  .lp, .star, .sparkle, .c-dot, .cel-crescent, .deco-corner, .wc-wash, .wc-photo, .polaroid, .tape, .film-stamp, .snap, .cover-deco .names, .cover-angkor .names .line > span {
+    animation: none !important;
+  }
+  .star { opacity: .85; }
+  .sparkle, .c-dot, .film-stamp { opacity: 1; }
+}
+.snaps .snap:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 9px); }
+@container (min-width: 720px) { .snaps .snap:last-child:nth-child(odd) { grid-column: auto; width: auto; justify-self: stretch; } }

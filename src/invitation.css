@@ -1,0 +1,400 @@
+/* ================= Invitation renderer =================
+   Must live inside a scroll container with `container-type: size` (class .inv-frame). */
+
+.inv-frame {
+  container-type: size;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.inv {
+  --soft: color-mix(in srgb, var(--ink) 62%, var(--bg));
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+  --surface: color-mix(in srgb, var(--bg) 92%, #fff);
+  position: relative;
+  min-height: 100cqh;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 280ms ease, color 280ms ease;
+}
+.inv.is-sealed { height: 100cqh; overflow: clip; }
+.inv.is-sealed:not(.is-revealing) .inv-body { visibility: hidden; }
+
+.inv.bg-paper {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.inv.bg-linen {
+  background-image:
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 3.5%, transparent) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--ink) 2.5%, transparent) 0 1px, transparent 1px 5px);
+}
+.inv.bg-gradient {
+  background-image:
+    radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(90% 50% at 50% 100%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 70%);
+}
+
+.inv-body { animation: invFade 320ms ease both; }
+@keyframes invFade { from { opacity: 0; } to { opacity: 1; } }
+
+.inv h1, .inv h2 { font-family: var(--f-display); font-weight: 400; margin: 0; letter-spacing: 0; }
+.inv p { margin: 0; }
+
+.kicker {
+  font-size: 11px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+/* ---- names with masked line reveal ---- */
+.inv .names { font-family: var(--f-names); font-style: var(--names-style); line-height: .95; color: var(--ink); }
+.names .line { display: block; overflow: hidden; padding: .08em 0; }
+.names .line > span { display: inline-block; }
+.names .amp { font-family: var(--f-display); font-style: italic; color: var(--accent); font-size: .5em; padding: .1em 0; }
+
+/* cover reveal choreography (triggered once the envelope opens) */
+.inv .cv { opacity: 0; transform: translateY(14px); }
+.inv .names .line > span { transform: translateY(105%); }
+.inv.is-open .cv, .inv.is-revealing .cv {
+  animation: cvIn 900ms cubic-bezier(.2,.7,.2,1) both;
+  animation-delay: calc(var(--d, 0ms) + 120ms);
+}
+.inv.is-open .names .line > span, .inv.is-revealing .names .line > span {
+  animation: lineUp 1000ms cubic-bezier(.2,.75,.15,1) both;
+}
+.inv.is-open .names .line:nth-child(1) > span, .inv.is-revealing .names .line:nth-child(1) > span { animation-delay: 380ms; }
+.inv.is-open .names .line:nth-child(2) > span, .inv.is-revealing .names .line:nth-child(2) > span { animation-delay: 500ms; }
+.inv.is-open .names .line:nth-child(3) > span, .inv.is-revealing .names .line:nth-child(3) > span { animation-delay: 600ms; }
+@keyframes cvIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes lineUp { from { transform: translateY(105%); } to { transform: none; } }
+
+/* scroll reveal for sections (only when JS enabled it) */
+.inv.rv-ready .rv:not(.in) { opacity: 0; transform: translateY(22px); }
+.inv .rv { transition: opacity 700ms ease, transform 800ms cubic-bezier(.2,.7,.2,1); }
+
+/* ---- photos ---- */
+.photo { position: relative; overflow: hidden; background: color-mix(in srgb, var(--ink) 8%, var(--bg)); }
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease, object-position 300ms ease; }
+.photo-empty { display: grid; place-items: center; color: color-mix(in srgb, var(--ink) 35%, transparent);
+  background:
+    repeating-linear-gradient(135deg, color-mix(in srgb, var(--ink) 5%, transparent) 0 1px, transparent 1px 12px),
+    color-mix(in srgb, var(--ink) 5%, var(--bg)); }
+.photo-empty span { font-family: var(--f-display); font-style: italic; font-size: 44px; letter-spacing: .06em; }
+
+/* ================= COVER: Editorial ================= */
+.cover { position: relative; min-height: 100cqh; }
+.cover-editorial { display: flex; flex-direction: column; padding: 28px 26px 30px; gap: 22px; }
+.ed-top { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--soft); border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.ed-grid { flex: 1; display: grid; gap: 22px; align-content: center; }
+.cover-editorial .names { font-size: clamp(54px, 17cqw, 132px); }
+.cover-editorial .names .line:nth-child(3) { padding-left: .9em; }
+.cover-editorial .kicker { margin-bottom: 14px; }
+.cover-editorial .cover-date { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: 12px; letter-spacing: .32em; color: var(--accent); }
+.cover-editorial .rule { flex: 1; height: 1px; background: var(--line); max-width: 70px; }
+.ed-photo { justify-self: end; width: min(62%, 300px); }
+.ed-photo .photo { aspect-ratio: 3 / 4; outline: 1px solid var(--line); outline-offset: 8px; }
+.cover-editorial .dear { font-family: var(--f-display); font-style: italic; font-size: 18px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 14px; }
+.cover-editorial .dear strong { font-weight: 500; color: var(--ink); font-style: normal; }
+@container (min-width: 720px) {
+  .cover-editorial { padding: 40px 64px 44px; }
+  .ed-grid { grid-template-columns: 1.35fr 1fr; align-items: center; gap: 48px; }
+  .ed-photo { width: 100%; max-width: 360px; }
+  .cover-editorial .names { font-size: clamp(80px, 10.5cqw, 150px); }
+}
+
+/* ================= COVER: Romance ================= */
+.cover-romance { color: #fff; display: flex; align-items: flex-end; overflow: hidden; }
+.cover-romance .cover-bg { position: absolute; inset: 0; }
+.cover-romance .cover-shade { position: absolute; inset: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 30%, transparent) 0%, transparent 30%, color-mix(in srgb, var(--bg) 70%, transparent) 62%, var(--bg) 100%); }
+.cover-romance .cover-inner { position: relative; width: 100%; padding: 30px 26px 40px; text-align: center; color: var(--ink); }
+.cover-romance .kicker { color: color-mix(in srgb, var(--ink) 78%, transparent); }
+.cover-romance .names { font-size: clamp(50px, 15cqw, 120px); margin: 14px 0 10px; color: var(--ink); }
+.cover-romance .names .amp { color: var(--accent); }
+.cover-romance .cover-date { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+@container (min-width: 720px) {
+  .cover-romance .cover-inner { padding: 60px 80px 70px; }
+}
+
+/* ================= COVER: Botanical ================= */
+.cover-botanical { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 26px 36px; gap: 12px; }
+.arch-wrap { position: relative; width: min(64%, 280px, 36cqh); margin-bottom: 14px; color: var(--accent); }
+.arch { aspect-ratio: 3 / 4; border-radius: 999px 999px 6px 6px; outline: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); outline-offset: 7px; }
+.arch-wrap .sprig { position: absolute; width: 46%; }
+.sprig-tl { left: -26%; bottom: -8%; }
+.sprig-tr { right: -26%; bottom: -8%; }
+.cover-botanical .names { font-size: clamp(48px, 14cqw, 96px); line-height: 1.05; color: var(--accent); }
+.cover-botanical .names .amp { font-size: .42em; color: var(--gold); }
+.cover-botanical .cover-date { font-family: var(--f-display); font-size: 20px; letter-spacing: .04em; }
+.cover-botanical .dear { font-size: 14px; color: var(--soft); }
+.cover-botanical .dear strong { color: var(--ink); font-weight: 500; }
+
+/* ================= Section shared ================= */
+.sec { padding: 64px 26px; max-width: 760px; margin: 0 auto; }
+.sh { margin-bottom: 26px; }
+.sh h2 { font-size: clamp(30px, 8cqw, 46px); line-height: 1.1; }
+.sh-label { font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+
+/* Editorial: numbered, left aligned, hairlines */
+.t-editorial .sec { border-top: 1px solid var(--line); }
+.sh-ed { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: baseline; }
+.sh-ed .sh-num { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--gold); }
+.sh-ed h2 { grid-column: 1 / -1; margin-top: 10px; }
+
+/* Romance: centered, ornament, tinted alternate bands */
+.t-romance .sec { text-align: center; }
+.t-romance .sec:nth-of-type(even) { background: color-mix(in srgb, #000 14%, transparent); max-width: none; }
+.t-romance .sec:nth-of-type(even) > * { max-width: 700px; margin-left: auto; margin-right: auto; }
+.sh-ro { display: grid; justify-items: center; gap: 8px; }
+.sh-ro h2 { font-style: italic; }
+.sh-ro .sh-label { color: var(--gold); }
+.flourish { width: 140px; height: 14px; color: var(--gold); margin-top: 6px; }
+
+/* Botanical: centered with sprig */
+.t-botanical .sec { text-align: center; }
+.sh-bo { display: grid; justify-items: center; gap: 6px; }
+.sh-sprig { width: 40px; height: 40px; color: var(--accent); transform: rotate(-45deg); }
+.sh-bo h2 { color: var(--accent); }
+
+/* ---- greeting ---- */
+.greet-dear { font-family: var(--f-display); font-style: italic; font-size: 26px; color: var(--accent); margin-bottom: 12px; }
+.greet-body { font-size: 17px; max-width: 36em; }
+.t-romance .greet-body, .t-botanical .greet-body { margin: 0 auto; }
+.t-editorial .greet-body { font-family: var(--f-display); font-size: 22px; line-height: 1.5; }
+
+/* ---- details ---- */
+.details { margin: 0; display: grid; gap: 0; }
+.detail { padding: 16px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.detail dt { font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; color: var(--soft); }
+.detail dd { margin: 0; font-family: var(--f-display); font-size: 23px; line-height: 1.3; }
+.detail small { display: block; font-family: var(--f-body); font-size: 13.5px; color: var(--soft); margin-top: 4px; }
+@container (min-width: 720px) {
+  .t-editorial .details { grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+  .t-editorial .detail { border-bottom: 0; padding: 18px 20px 18px 0; }
+  .t-editorial .detail + .detail { border-left: 1px solid var(--line); padding-left: 20px; }
+}
+.t-romance .details { border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); padding: 10px 26px; background: color-mix(in srgb, #000 12%, transparent); }
+.t-romance .detail:last-child { border-bottom: 0; }
+.t-botanical .details { gap: 12px; }
+.t-botanical .detail { border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); border-radius: 18px; padding: 16px; background: color-mix(in srgb, var(--bg) 70%, #fff); }
+@container (min-width: 720px) { .t-botanical .details { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---- story ---- */
+.story { font-size: 17px; white-space: pre-line; }
+.t-editorial .story::first-letter { font-family: var(--f-display); float: left; font-size: 4.2em; line-height: .82; padding: 6px 10px 0 0; color: var(--accent); }
+.t-romance .story { font-family: var(--f-display); font-style: italic; font-size: 23px; line-height: 1.5; }
+.t-botanical .story { max-width: 34em; margin: 0 auto; }
+
+/* ---- schedule ---- */
+.schedule { list-style: none; margin: 0; padding: 0; }
+.schedule li { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); text-align: left; }
+.s-time { font-family: var(--f-display); font-size: 19px; color: var(--accent); white-space: nowrap; }
+.s-body { display: grid; }
+.s-title { font-weight: 500; font-size: 16px; }
+.s-note { font-size: 14px; color: var(--soft); }
+.t-romance .schedule { position: relative; max-width: 460px; margin: 0 auto; }
+.t-romance .schedule::before { content: ''; position: absolute; left: 100px; top: 8px; bottom: 8px; width: 1px; background: color-mix(in srgb, var(--gold) 50%, transparent); }
+.t-romance .schedule li { border: 0; grid-template-columns: 84px 1fr; gap: 32px; position: relative; }
+.t-romance .schedule li::before { content: ''; position: absolute; left: 96px; top: 22px; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); border: 1px solid var(--gold); }
+.t-romance .s-time { text-align: right; color: var(--gold); }
+.t-botanical .schedule { display: grid; gap: 10px; }
+.t-botanical .schedule li { border: 0; border-radius: 16px; background: color-mix(in srgb, var(--accent) 8%, transparent); padding: 14px 18px; grid-template-columns: 80px 1fr; }
+@container (min-width: 720px) { .t-botanical .schedule { grid-template-columns: 1fr 1fr; } }
+
+/* ---- gallery ---- */
+.gallery { display: grid; gap: 10px; }
+.g-item { aspect-ratio: 4 / 5; }
+.t-editorial .gallery { grid-template-columns: 1fr 1fr; }
+.t-editorial .gallery .g-item:first-child { grid-row: span 2; aspect-ratio: auto; min-height: 100%; }
+.t-editorial .gallery.g-1 { grid-template-columns: 1fr; }
+.t-romance .gallery { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 6px; margin: 0 -26px; padding-left: 26px; padding-right: 26px; }
+.t-romance .gallery .g-item { flex: 0 0 72%; scroll-snap-align: center; aspect-ratio: 3 / 4; }
+@container (min-width: 720px) { .t-romance .gallery .g-item { flex-basis: 40%; } }
+.t-botanical .gallery { grid-template-columns: 1fr 1fr; gap: 14px; }
+.t-botanical .g-item { border-radius: 999px 999px 10px 10px; }
+.t-botanical .gallery.g-1 { grid-template-columns: minmax(0, 300px); justify-content: center; }
+.t-botanical .gallery.g-3 .g-item:last-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; border-radius: 14px; }
+
+/* ---- location ---- */
+.loc { display: grid; gap: 14px; justify-items: start; }
+.t-romance .loc, .t-botanical .loc { justify-items: center; }
+.pin { width: 30px; height: 30px; color: var(--accent); }
+.loc-addr { font-size: 16px; color: var(--soft); max-width: 30em; }
+.inv-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; min-height: 44px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; transition: background-color 200ms ease, color 200ms ease; }
+.inv-btn:hover { background: var(--accent); color: var(--bg); }
+.t-botanical .inv-btn { border-radius: 999px; }
+
+/* ---- closing ---- */
+.sec-closing { text-align: center; padding-bottom: 40px; }
+.closing { font-family: var(--f-display); font-size: 24px; font-style: italic; line-height: 1.45; max-width: 26em; margin: 0 auto 26px !important; }
+.sign { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--soft); }
+.sign-names { font-family: var(--f-names); font-style: var(--names-style); font-size: 34px; color: var(--accent); margin-top: 4px !important; }
+.mono-seal { display: inline-grid; place-items: center; width: 54px; height: 54px; margin-top: 22px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); font-family: var(--f-display); font-style: italic; font-size: 19px; letter-spacing: .05em; }
+.inv-foot { text-align: center; font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: var(--soft); opacity: .7; padding: 20px 0 34px; }
+
+/* ================= Envelope ================= */
+.env-stage {
+  position: absolute; inset: 0; z-index: 5; height: 100cqh;
+  display: grid; place-items: center;
+  background-color: var(--bg);
+  background-image: radial-gradient(80% 60% at 50% 45%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 70%);
+  transition: opacity 420ms ease, transform 420ms ease;
+}
+.env-wrap { display: grid; justify-items: center; gap: 26px; padding: 20px; width: 100%; }
+.env {
+  --w: min(78cqw, 380px);
+  --env: color-mix(in srgb, var(--accent) 14%, #F4ECDF);
+  --env-dark: color-mix(in srgb, var(--accent) 24%, #E8DCC8);
+  position: relative; width: var(--w); aspect-ratio: 1.45; perspective: 1100px; cursor: pointer;
+  filter: drop-shadow(0 18px 30px rgba(30, 10, 12, .18));
+}
+.t-romance .env { --env: #F3E8D8; --env-dark: #E4D3BA; }
+.env-back { position: absolute; inset: 0; background: var(--env-dark); border-radius: 4px; }
+.env-card {
+  position: absolute; left: 6%; right: 6%; top: 8%; bottom: 8%; z-index: 1;
+  background: #FFFDF8; border-radius: 2px; display: grid; place-content: center; text-align: center; gap: 4px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04);
+  color: #2A2522; transition: transform 620ms cubic-bezier(.3,.7,.2,1) 520ms;
+}
+.env-card::after { content: ''; position: absolute; inset: 7px; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); }
+.env-card-k { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: #7a7068; }
+.env-card-n { font-family: var(--f-names); font-style: var(--names-style); font-size: clamp(18px, 5.4cqw, 26px); color: color-mix(in srgb, var(--accent) 85%, #000); }
+.t-romance .env-card-n { color: #5a1a26; }
+.env-pocket {
+  position: absolute; inset: 0; z-index: 2; background: var(--env); border-radius: 4px;
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+}
+.env-pocket::after { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, transparent 55%, rgba(0,0,0,.05)); }
+.env-flap {
+  position: absolute; left: 0; right: 0; top: 0; height: 58%; z-index: 3;
+  background: color-mix(in srgb, var(--env) 92%, #000); clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center; transform: rotateX(0deg); backface-visibility: visible;
+  transition: transform 560ms cubic-bezier(.45,.05,.3,1) 160ms, z-index 0s 420ms;
+}
+.env-seal {
+  position: absolute; left: 50%; top: 58%; z-index: 4; width: 62px; height: 62px; margin: -31px 0 0 -31px;
+  border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 70%, #fff), var(--accent) 55%, color-mix(in srgb, var(--accent) 70%, #000));
+  box-shadow: 0 2px 6px rgba(0,0,0,.25), inset 0 0 0 4px color-mix(in srgb, #000 12%, transparent);
+  color: color-mix(in srgb, var(--bg) 85%, #fff); font-family: var(--f-display); font-style: italic; font-size: 20px; letter-spacing: .04em;
+  transition: transform 260ms ease, opacity 260ms ease;
+}
+.t-romance .env-seal { color: #3B0E19; }
+.env:hover .env-seal { transform: scale(1.04); }
+.env-open {
+  font: 500 12px/1 var(--f-body); letter-spacing: .26em; text-transform: uppercase;
+  padding: 15px 26px; min-height: 46px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease;
+}
+.env-open:hover, .env-open:focus-visible { background: var(--accent); color: var(--bg); }
+.env-open:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.t-botanical .env-open { border-radius: 999px; }
+
+.phase-opening .env-seal, .phase-leaving .env-seal { transform: scale(.6); opacity: 0; }
+.phase-opening .env-flap, .phase-leaving .env-flap { transform: rotateX(-180deg); z-index: 0; }
+.phase-opening .env-card, .phase-leaving .env-card { transform: translateY(-46%); }
+.phase-opening .env-open, .phase-leaving .env-open { opacity: 0; }
+.phase-leaving { opacity: 0; transform: scale(1.06); pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .inv .cv, .inv .names .line > span { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .inv .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .inv-body { animation: none; }
+  .env-stage, .env-flap, .env-card, .env-seal { transition: none !important; }
+}
+
+/* romance cover without a photo: a quiet tonal backdrop instead of initials */
+.cover-romance .cover-bg.photo-empty { background: radial-gradient(90% 70% at 50% 30%, color-mix(in srgb, var(--accent) 22%, var(--bg)), var(--bg)); }
+.cover-romance .cover-bg.photo-empty span { display: none; }
+@container (min-width: 720px) {
+  .cover-botanical .names { display: flex; justify-content: center; align-items: baseline; gap: .25em; font-size: clamp(56px, 8cqw, 96px); }
+  .cover-botanical .names .amp { font-size: .5em; }
+}
+
+/* ================= Guest name plate (prominent personalisation) ================= */
+.guest-plate { display: grid; justify-items: center; gap: 4px; text-align: center; }
+.gp-label { font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.gp-name { font-family: var(--f-display); font-style: italic; font-size: clamp(26px, 7.4cqw, 36px); line-height: 1.25; color: var(--ink); overflow-wrap: anywhere; }
+.gp-romance { margin: 26px auto 0; max-width: 380px; padding: 14px 24px 16px; border: 1px solid color-mix(in srgb, var(--gold) 70%, transparent); background: color-mix(in srgb, var(--bg) 45%, transparent); backdrop-filter: blur(4px); }
+.gp-botanical { margin-top: 10px; }
+.gp-botanical .gp-label { display: flex; align-items: center; gap: 10px; color: var(--accent); }
+.gp-botanical .gp-label::before, .gp-botanical .gp-label::after { content: ''; width: 28px; height: 1px; background: color-mix(in srgb, var(--accent) 50%, transparent); }
+.gp-botanical .gp-name { color: var(--ink); }
+.gp-editorial { justify-items: start; text-align: left; border-top: 1px solid var(--line); padding-top: 14px; }
+.gp-editorial .gp-label { color: var(--accent); }
+
+.env-for { display: grid; justify-items: center; gap: 2px; text-align: center; }
+.env-for-label { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--soft); }
+.env-for-name { font-family: var(--f-display); font-style: italic; font-weight: 400; font-size: clamp(26px, 8cqw, 38px); line-height: 1.2; color: var(--ink); overflow-wrap: anywhere; }
+
+/* ================= Khmer typography ================= */
+.inv.lang-km { line-height: 1.95; }
+.inv.lang-km :is(.kicker, .sh-label, .ed-top, .detail dt, .gp-label, .sign, .env-card-k, .env-open, .inv-btn, .inv-foot, .env-for-label, .cover-date) {
+  letter-spacing: 0; text-transform: none;
+}
+.inv.lang-km :is(.kicker, .sh-label, .gp-label, .env-for-label, .sign, .env-card-k) { font-size: 13px; }
+.inv.lang-km :is(.kicker, .sh-label, .env-for-label) { font-family: 'Moul', var(--f-display); font-weight: 400; line-height: 1.9; }
+.inv.lang-km .sh h2 { font-family: 'Moul', var(--f-display); font-size: clamp(20px, 5.4cqw, 30px); line-height: 1.8; }
+.inv.lang-km .names { line-height: 1.3; }
+.inv.lang-km .names .line { padding: .14em 0; }
+.inv.lang-km :is(.gp-name, .env-for-name, .greet-dear) { font-style: normal; line-height: 1.7; }
+.inv.lang-km .cover-date { font-size: 15px; }
+.inv.lang-km .t-romance .story, .inv.lang-km.t-romance .story, .inv.lang-km .closing { font-style: normal; line-height: 1.9; }
+.inv.lang-km .greet-body, .inv.lang-km.t-editorial .greet-body { font-size: 17px; line-height: 2; }
+.inv.lang-km .story::first-letter { float: none; font-size: inherit; padding: 0; color: inherit; }
+.inv.lang-km .detail dd { font-size: 19px; line-height: 1.8; }
+.inv.lang-km .s-time { font-size: 16px; }
+.inv.lang-km .env-open, .inv.lang-km .inv-btn { font-size: 14px; }
+
+/* heart pressed into the wax seal */
+.seal-heart { width: 26px; height: 26px; fill: currentColor; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .25)) drop-shadow(0 -1px 0 rgba(0, 0, 0, .25)); }
+.env:hover .seal-heart { animation: sealBeat 900ms ease-in-out; }
+@keyframes sealBeat { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.14); } 55% { transform: scale(.98); } }
+@media (prefers-reduced-motion: reduce) { .env:hover .seal-heart { animation: none; } }
+
+.mono-seal .seal-heart { width: 22px; height: 22px; filter: none; }
+.inv.rv-ready .sec-closing.in .mono-seal .seal-heart { animation: sealBeat 1100ms ease-in-out 700ms 2; }
+
+/* ---------- long names: one name per row, never split ---------- */
+.name-pair { display: inline; }
+.np-name { white-space: nowrap; display: inline-block; }
+@container (max-width: 560px) {
+  .sign-names .name-pair, .env-card-n .name-pair { display: flex; flex-direction: column; align-items: center; }
+  .sign-names .np-amp, .env-card-n .np-amp { font-size: .55em; line-height: 1.2; opacity: .8; }
+}
+.inv .names .line > span { white-space: nowrap; }
+.inv .names.names-l .line { font-size: .78em; }
+.inv .names.names-xl .line { font-size: .6em; }
+.inv .names :is(.line > span) { max-width: 100%; }
+.inv .sign-names { font-size: clamp(26px, 8.4cqw, 36px); line-height: 1.35; }
+.inv .sign-names.names-l { font-size: clamp(22px, 7cqw, 32px); }
+.inv .sign-names.names-xl { font-size: clamp(18px, 5.8cqw, 28px); }
+.inv .env-card-n.names-l { font-size: clamp(15px, 4.4cqw, 22px); }
+.inv .env-card-n.names-xl { font-size: clamp(13px, 3.6cqw, 19px); }
+
+/* ---------- cover date line: never orphan a word, never cross the frame ---------- */
+.cd-time { white-space: nowrap; }
+.inv.lang-km .cd-date { white-space: nowrap; }
+@container (max-width: 560px) {
+  .cd-sep { display: none; }
+  .cd-time { display: block; margin-top: 2px; }
+}
+.cover-angkor { padding-left: 46px; padding-right: 46px; }
+.ak-inner { max-width: 100%; }
+.inv.lang-km .cover-angkor .cover-date { font-size: clamp(13px, 3.9cqw, 16px); line-height: 1.8; }
+.cover-angkor .cover-date, .cover-angkor .names, .cover-angkor .kicker { max-width: 100%; }
+
+/* ---------- Khmer names: upright Moul, never fake-italic ---------- */
+.inv .kh { font-family: "Moul", "Noto Serif Khmer", serif !important; font-style: normal !important; font-weight: 400; letter-spacing: 0 !important; text-transform: none !important; }
+.inv .names .line > span.kh { font-size: .64em; line-height: 1.75; }
+.inv .names .line:has(> .kh) { padding: .04em 0; }
+.inv .sign-names .kh { font-size: .74em; line-height: 1.8; }
+.inv .env-card-n .kh { font-size: .78em; line-height: 1.8; }
+.inv .gp-name.kh { font-size: clamp(18px, 5.4cqw, 26px); line-height: 1.8; }
+.inv .names .line > span.kh::selection, .inv .kh::selection { -webkit-text-fill-color: currentColor; }
