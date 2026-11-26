@@ -4,6 +4,9 @@ import Flow from './pages/Flow.jsx';
 import Viewer from './pages/Viewer.jsx';
 import Couple from './pages/Couple.jsx';
 import { Toasts } from './components/ui.jsx';
+import SignIn from './pages/SignIn.jsx';
+import { useAuth } from './auth.js';
+import { loadByOwnerToken, loadMine, loadProject } from './store.js';
 
 function parse(hash) {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
@@ -14,8 +17,34 @@ function parse(hash) {
   return { page: 'dashboard' };
 }
 
+/** Fetch whatever the current route needs before it renders. */
+function prepare(route) {
+  if (route.page === 'dashboard') return loadMine();
+  if (route.page === 'flow') return Promise.all([loadMine(), route.id ? loadProject(route.id) : null]);
+  if (route.page === 'viewer') return loadProject(route.id);
+  if (route.page === 'couple') return loadByOwnerToken(route.token);
+  return Promise.resolve();
+}
+
 export default function App() {
   const [route, setRoute] = useState(() => parse(location.hash));
+  const auth = useAuth();
+  const designerPage = route.page === 'dashboard' || route.page === 'flow';
+  const needsSignIn = designerPage && auth.status === 'out';
+  const [load, setLoad] = useState({ key: '', state: 'loading' });
+  const key = `${route.page}/${route.id || route.token || ''}/${auth.user ? auth.user.uid : ''}`;
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let dead = false;
+    if (auth.status === 'loading' || needsSignIn) return undefined;
+    setLoad({ key, state: 'loading' });
+    prepare(route)
+      .then(() => !dead && setLoad({ key, state: 'ready' }))
+      .catch(() => !dead && setLoad({ key, state: 'error' }));
+    return () => {
+      dead = true;
+    };
+  }, [key, attempt, auth.status]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const on = () => {
       setRoute(parse(location.hash));
@@ -27,6 +56,28 @@ export default function App() {
   useEffect(() => {
     document.body.dataset.page = route.page;
   }, [route.page]);
+
+  if (needsSignIn) return <SignIn />;
+  if (auth.status === 'loading' || load.key !== key || load.state === 'loading') {
+    return (
+      <main className="viewer-missing" aria-busy="true">
+        <p className="eyebrow">Everafter Studio</p>
+        <p>Loading…</p>
+      </main>
+    );
+  }
+  if (load.state === 'error') {
+    return (
+      <main className="viewer-missing">
+        <p className="eyebrow">Everafter Studio</p>
+        <h1>Couldn’t load</h1>
+        <p>Check your internet connection and try again.</p>
+        <button type="button" className="btn btn-primary" onClick={() => setAttempt((n) => n + 1)}>
+          Try again
+        </button>
+      </main>
+    );
+  }
 
   return (
     <>

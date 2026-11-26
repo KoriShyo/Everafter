@@ -7,7 +7,7 @@ import { Invitation } from '../components/Invitation.jsx';
 export default function Viewer({ id, guestId }) {
   const p = useProject(id);
   const frame = useRef(null);
-  const [banner, setBanner] = useState(true);
+  const [banner, setBanner] = useState(false);
   const [lang, setLang] = useState(null); // null = invitation's own language
   const guest = p?.guests.find((g) => g.id === guestId);
   const current = lang || p?.design.lang || 'en';

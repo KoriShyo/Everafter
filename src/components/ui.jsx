@@ -108,7 +108,7 @@ export function SaveIndicator() {
         </>
       ) : (
         <>
-          <Icon name="check" size={14} /> {t('Saved on this device')}
+          <Icon name="check" size={14} /> {t('Saved')}
         </>
       )}
     </span>

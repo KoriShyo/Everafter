@@ -1,0 +1,37 @@
+rules_version = '2';
+
+// Everafter Studio.
+// - Invitations/photos/couple links can be fetched by id (that is how guests and couples open them); ids are unguessable.
+// - Only the signed-in designer who owns an invitation can create or change it, and list their own.
+// - Anyone holding an invitation link may update ONLY its guest list (that is what the couple does without an account).
+// - Nothing is ever deleted (the app flags invitations as deleted instead).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /projects/{id} {
+      allow get: if true;
+      allow list: if request.auth != null && resource.data.ownerUid == request.auth.uid;
+      allow create: if request.auth != null
+                    && request.resource.data.ownerUid == request.auth.uid
+                    && request.resource.data.json.size() < 900000
+                    && request.resource.data.guestsJson.size() < 200000;
+      allow update: if (request.auth != null
+                        && resource.data.ownerUid == request.auth.uid
+                        && request.resource.data.ownerUid == request.auth.uid
+                        && request.resource.data.json.size() < 900000
+                        && request.resource.data.guestsJson.size() < 200000)
+                    || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['guestsJson', 'updatedAt'])
+                        && request.resource.data.guestsJson.size() < 200000);
+      allow delete: if false;
+    }
+    match /images/{hash} {
+      allow get: if true;
+      allow create: if request.auth != null && request.resource.data.data.size() < 1000000;
+      allow update, delete, list: if false;
+    }
+    match /coupleTokens/{token} {
+      allow get: if true;
+      allow create, update: if request.auth != null;
+      allow delete, list: if false;
+    }
+  }
+}

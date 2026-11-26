@@ -403,9 +403,9 @@ export function DemoNote() {
     <div className="demo-note" role="note">
       <Icon name="eye" size={16} />
       <p>
-        <strong>{t('Demo links.')}</strong>{' '}
+        <strong>{t('Share links.')}</strong>{' '}
         {t(
-          'This prototype stores invitations in this browser only, so links open correctly on this device but are not published online yet. Links use a private guest code — never the guest’s name — and stay the same if you rename someone.',
+          'Links open on any phone once the top bar shows “Saved”. Links use a private guest code — never the guest’s name — and stay the same if you rename someone.',
         )}
       </p>
     </div>

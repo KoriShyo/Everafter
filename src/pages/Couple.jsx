@@ -27,7 +27,7 @@ export default function Couple({ token }) {
         </header>
         <main className="notfound">
           <h1>{t('This couple link isn’t valid here')}</h1>
-          <p>{t('The link may have been replaced by your designer, or it was created on a different device. Ask your designer for the latest link.')}</p>
+          <p>{t('The link may have been replaced by your designer. Ask your designer for the latest link.')}</p>
         </main>
       </div>
     );

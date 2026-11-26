@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { coupleName, formatDate, TEMPLATES } from '../data.js';
 import { useT } from '../i18n.js';
+import { signOut, useAuth } from '../auth.js';
 import { deleteProject, restoreExample, toast, useProjects } from '../store.js';
 import { CoverThumb, Icon, LangSwitch, Logo } from '../components/ui.jsx';
 
@@ -98,13 +99,19 @@ function ProjectCard({ p, index }) {
 export default function Dashboard() {
   const t = useT();
   const projects = useProjects();
+  const { user } = useAuth();
   const [a, em, b] = t('Your invitation|atelier|').split('|');
   return (
     <div className="dash">
       <header className="topbar">
         <Logo />
-        <span className="topbar-note">{t('Prototype · invitations are saved in this browser')}</span>
+        <span className="topbar-note">{user && user.email ? user.email : t('Invitations are saved online')}</span>
         <LangSwitch />
+        {user && user.uid !== 'local' ? (
+          <button type="button" className="btn btn-ghost btn-sm signout" onClick={signOut}>
+            {t('Sign out')}
+          </button>
+        ) : null}
       </header>
       <main className="dash-main" id="main">
         <section className="dash-hero">
