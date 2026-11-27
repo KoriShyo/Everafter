@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useT } from '../i18n.js';
 import { authMessage, resetPassword, signIn, signInGoogle, signUp } from '../auth.js';
 import { Field, LangSwitch, Logo } from '../components/ui.jsx';
+import { googleSignIn } from '../firebaseConfig.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -122,7 +123,7 @@ export default function SignIn() {
             {busy ? t('Please wait…') : t(mode === 'up' ? 'Create account' : mode === 'reset' ? 'Send reset link' : 'Sign in')}
           </button>
 
-          {mode !== 'reset' ? (
+          {mode !== 'reset' && googleSignIn ? (
             <>
               <p className="auth-or">
                 <span>{t('or')}</span>
